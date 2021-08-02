@@ -118,6 +118,7 @@ namespace Squirrel
 
                         var allApps = currentRelease.EnumerateFiles()
                             .Where(x => x.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+                            .Where(x => !x.Name.StartsWith("createdump.", StringComparison.OrdinalIgnoreCase))
                             .Where(x => !x.Name.StartsWith("squirrel.", StringComparison.OrdinalIgnoreCase) && !x.Name.StartsWith("update.", StringComparison.OrdinalIgnoreCase))
                             .ToList();
 
@@ -439,6 +440,7 @@ namespace Squirrel
                     squirrelApps = targetDir.EnumerateFiles()
                         .Where(x => x.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
                         .Where(x => !x.Name.StartsWith("squirrel.", StringComparison.OrdinalIgnoreCase))
+                        .Where(x => !x.Name.StartsWith("createdump.", StringComparison.OrdinalIgnoreCase))
                         .Select(x => x.FullName)
                         .ToList();
 
