@@ -224,8 +224,19 @@ namespace Squirrel
                 foreach (var f in (ShortcutLocation[]) Enum.GetValues(typeof(ShortcutLocation))) {
                     if (!locations.HasFlag(f)) continue;
 
-                    var file = linkTargetForVersionInfo(f, zf, fileVerInfo);
-                    var fileExists = File.Exists(file);
+                    bool fileExists;
+                    string file;
+
+                    try
+                    {
+                        file = linkTargetForVersionInfo( f, zf, fileVerInfo );
+                        fileExists = File.Exists( file );
+                    }
+                    catch ( Exception ex )
+                    {
+                        this.Log().Warn( "Failed to get link target - {0}", ex.Message );
+                        continue;
+                    }
 
                     // NB: If we've already installed the app, but the shortcut
                     // is no longer there, we have to assume that the user didn't
@@ -284,7 +295,17 @@ namespace Squirrel
                 foreach (var f in (ShortcutLocation[]) Enum.GetValues(typeof(ShortcutLocation))) {
                     if (!locations.HasFlag(f)) continue;
 
-                    var file = linkTargetForVersionInfo(f, zf, fileVerInfo);
+                    string file;
+
+                    try
+                    {
+                        file = linkTargetForVersionInfo( f, zf, fileVerInfo );
+                    }
+                    catch ( Exception ex )
+                    {
+                        this.Log().Warn( "Failed to get link target - {0}", ex.Message );
+                        continue;
+                    }
 
                     this.Log().Info("Removing shortcut for {0} => {1}", exeName, file);
 
