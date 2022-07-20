@@ -250,31 +250,45 @@ namespace Squirrel
                     this.Log().Info("Creating shortcut for {0} => {1}", exeName, file);
 
                     ShellLink sl;
-                    this.ErrorIfThrows(() => Utility.Retry(() => {
-                        File.Delete(file);
 
-                        var target = Path.Combine(rootAppDirectory, exeName);
-                        sl = new ShellLink {
-                            Target = target,
-                            IconPath = icon ?? target,
-                            IconIndex = 0,
-                            WorkingDirectory = Path.GetDirectoryName(exePath),
-                            Description = zf.Description,
-                        };
+                    try
+                    {
+                        Utility.Retry( () =>
+                        {
+                            File.Delete( file );
 
-                        if (!String.IsNullOrWhiteSpace(programArguments)) {
-                            sl.Arguments += String.Format(" -a \"{0}\"", programArguments);
-                        }
+                            var target = Path.Combine( rootAppDirectory, exeName );
+                            sl = new ShellLink
+                            {
+                                Target = target,
+                                IconPath = icon ?? target,
+                                IconIndex = 0,
+                                WorkingDirectory = Path.GetDirectoryName( exePath ),
+                                Description = zf.Description,
+                            };
 
-                        var appUserModelId = String.Format("com.squirrel.{0}.{1}", zf.Id.Replace(" ", ""), exeName.Replace(".exe", "").Replace(" ", ""));
-                        var toastActivatorCLSID = Utility.CreateGuidFromHash(appUserModelId).ToString();
+                            if ( !String.IsNullOrWhiteSpace( programArguments ) )
+                            {
+                                sl.Arguments += String.Format( " -a \"{0}\"", programArguments );
+                            }
 
-                        sl.SetAppUserModelId(appUserModelId);
-                        sl.SetToastActivatorCLSID(toastActivatorCLSID);
+                            var appUserModelId = String.Format( "com.squirrel.{0}.{1}", zf.Id.Replace( " ", "" ),
+                                exeName.Replace( ".exe", "" ).Replace( " ", "" ) );
+                            var toastActivatorCLSID = Utility.CreateGuidFromHash( appUserModelId ).ToString();
 
-                        this.Log().Info("About to save shortcut: {0} (target {1}, workingDir {2}, args {3}, toastActivatorCSLID {4})", file, sl.Target, sl.WorkingDirectory, sl.Arguments, toastActivatorCLSID);
-                        if (ModeDetector.InUnitTestRunner() == false) sl.Save(file);
-                    }, 4), "Can't write shortcut: " + file);
+                            sl.SetAppUserModelId( appUserModelId );
+                            sl.SetToastActivatorCLSID( toastActivatorCLSID );
+
+                            this.Log().Info(
+                                "About to save shortcut: {0} (target {1}, workingDir {2}, args {3}, toastActivatorCSLID {4})",
+                                file, sl.Target, sl.WorkingDirectory, sl.Arguments, toastActivatorCLSID );
+                            if ( ModeDetector.InUnitTestRunner() == false ) sl.Save( file );
+                        } );
+                    }
+                    catch ( Exception ex )
+                    {
+                        this.Log().WarnException( $"Failed to create shortcut {file}", ex );
+                    }
                 }
 
                 fixPinnedExecutables(zf.Version);
