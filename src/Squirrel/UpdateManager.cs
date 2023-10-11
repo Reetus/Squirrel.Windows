@@ -322,7 +322,7 @@ namespace Squirrel
             if (assembly != null &&
                 Path.GetFileName(assembly.Location).Equals("update.exe", StringComparison.OrdinalIgnoreCase) &&
                 assembly.Location.IndexOf("app-", StringComparison.OrdinalIgnoreCase) == -1 &&
-                assembly.Location.IndexOf("SquirrelTemp", StringComparison.OrdinalIgnoreCase) == -1) {
+                assembly.Location.IndexOf("FYITemp", StringComparison.OrdinalIgnoreCase) == -1) {
                 return Path.GetFullPath(assembly.Location);
             }
 

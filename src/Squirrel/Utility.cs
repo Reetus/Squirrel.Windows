@@ -250,8 +250,8 @@ namespace Squirrel
 
         public static DirectoryInfo GetTempDirectory(string localAppDirectory)
         {
-            var tempDir = Environment.GetEnvironmentVariable("SQUIRREL_TEMP");
-            tempDir = tempDir ?? Path.Combine(localAppDirectory ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SquirrelTemp");
+            var tempDir = Environment.GetEnvironmentVariable("FYI_TEMP");
+            tempDir = tempDir ?? Path.Combine(localAppDirectory ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FYITemp");
 
             var di = new DirectoryInfo(tempDir);
             if (!di.Exists) di.Create();

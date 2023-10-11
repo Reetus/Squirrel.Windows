@@ -157,7 +157,7 @@ int CUpdateRunner::ExtractUpdaterAndRun(wchar_t* lpCommandLine, bool useFallback
 
 	std::vector<CString> to_delete;
 
-	wchar_t* envSquirrelTemp = _wgetenv(L"SQUIRREL_TEMP");
+	wchar_t* envSquirrelTemp = _wgetenv(L"FYI_TEMP");
 	if (envSquirrelTemp &&
 		DirectoryExists(envSquirrelTemp) &&
 		DirectoryIsWritable(envSquirrelTemp) &&
@@ -190,7 +190,7 @@ int CUpdateRunner::ExtractUpdaterAndRun(wchar_t* lpCommandLine, bool useFallback
 
 gotADir:
 
-	wcscat_s(targetDir, _countof(targetDir), L"\\SquirrelTemp");
+	wcscat_s(targetDir, _countof(targetDir), L"\\FYITemp");
 
 	if (!CreateDirectory(targetDir, NULL) && GetLastError() != ERROR_ALREADY_EXISTS) {
 		wchar_t err[4096];
